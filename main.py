@@ -70,7 +70,7 @@ class Cathode:
         eq4 = Eq(c3 * c1 - self.catholyte_props.K2 * c2, 0)  # Second dissociation
 
         
-        
+ #holaa       
     
         
     

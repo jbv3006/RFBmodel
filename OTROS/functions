@@ -1,0 +1,20 @@
+def sigma_io_catholyte(SOC):    #Catolythe resistance, dependence on SOC
+    sigma=SOC*params["sigma_VO2plus"]+(1-SOC)*params["sigma_VOplus2"]
+    return sigma
+
+def reversible_OCP(T,c1,c2,p_h2,c3,a_wca,F_y):
+    R = 8.314  # Ideal gas constant in J/(mol·K)
+    n=2
+    F=96485 # Faraday constant C/mol
+    E_cell= (E_hc_vo2-E_hc_h)+delta_S_r/(n*F)*(T-298.15)
+    Eocp= E_cell +R*T/(n*F)*np.log((c1*c2*p_h2^0.5)/(c3*a_wca)*F_y)
+    return Eocp
+
+# Surface tension (N m^-1)
+def sigma_s(T):
+    return -0.00016767 * T + 0.1218
+
+# Catholyte viscosity as a function of temperature T (in K)
+def mu_ca(T):
+    R = 8.314  # Ideal gas constant in J/(mol·K)
+    return 5.4e-6 * np.exp(16131 / (R * T))

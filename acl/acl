@@ -1,9 +1,0 @@
-@dataclass
-
-class Acl:
-    def __init__(self, lenght, electronic_conductivity):
-        self.length=lenght
-        self.conductivity=electronic_conductivity
-
-    def resistance(self):
-        return self.length/self.conductivity

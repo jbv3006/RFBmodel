@@ -7,7 +7,7 @@ class Cathode:
     def conc(self,SOC):
         # Define symbolic variables
         c1, c2, c3, c4, c5, c6  = vars
-        #[ VO^+2, VO_2^+, H+, HSO4-, SO4-2, H2SO4]
+        # [VO^+2, VO_2^+, H+, HSO4-, SO4-2, H2SO4]
         c_sulfate= 6.03  # Total sulfate concentration. 6 M or mol/L
         c_vanadium= 1.03 #Total vanadium concentration. M or mol/L
         Q_1= 199.5 #First dissociation quotient of H2SO4 [Adimensional]. Dependance on temperature is negligible
@@ -25,6 +25,7 @@ class Cathode:
 
         # Initial guesses
         initial_guess = [0.5, 0.53, 3, 2.95, 0.08]
+
         # Solve
         solution = fsolve(equations, initial_guess)
         return solution

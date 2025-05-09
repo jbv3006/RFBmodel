@@ -1,13 +1,8 @@
-from dataclasses import dataclass
-from sympy import symbols, Eq, solve
-@dataclass
-class CatholyteProperties:
-    K1: float  # Equilibrium constant first dissociation of acid
-    K2: float  # Equilibrium constant first dissociation of acid
+from sympy import fsolve
 
 class Cathode:
-    def __init__(self, catholyte_props: CatholyteProperties):
-        self.catholyte_props=catholyte_props
+    def __init__(self):
+        pass
 
     def conc(self,SOC):
         # Define symbolic variables

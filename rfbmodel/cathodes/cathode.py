@@ -1,6 +1,7 @@
 from scipy.optimize import fsolve
 import numpy as np
 
+
 class Cathode:
     def __init__(self):
 
@@ -16,6 +17,10 @@ class Cathode:
         self.Q_2 = 2.4          # Second dissociation quotient of H2SO4 [Adimensional]. Dependence on temperature is NOT negligible
         self.gamma_1 = 1
         self.gamma_2 = 1
+        self.thickness=50/1000 #Cathode thickness [m]
+        self.conductivity= 0 #Conductivity of the catholyte / sigma [S m^-1]
+        self.resistance=0 #Resistance of the catholyte / m^2/S
+        self.T=298 #Temperature of the cell [K]
         pass
 
     def conc_sys(self, x):
@@ -44,3 +49,8 @@ class Cathode:
         # Set the equilibrium concentration in the cathode
         self.c = c
 
+    def cath_resistance(self):
+        ''' Solves cathode resistance'''
+        # Set the conducttivity in the catholyte
+        self.conductivity= self.SOC*conductivity_funcV5(self.T)+(1-self.SOC)*conductivity_funcV4(self.T)
+        self.resistance=self.thickness/self.resistance

@@ -47,10 +47,13 @@ class Cathode:
         ''' Solves cathode concentration'''
         c = fsolve(self.conc_sys, x0 = self.c)
         # Set the equilibrium concentration in the cathode
+        print("lol")
         self.c = c
+        
 
     def cath_resistance(self):
         ''' Solves cathode resistance'''
         # Set the conducttivity in the catholyte
+        print("loool")
         self.conductivity= self.SOC*conductivity_funcV5(self.T)+(1-self.SOC)*conductivity_funcV4(self.T)
         self.resistance=self.thickness/self.resistance

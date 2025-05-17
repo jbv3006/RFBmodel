@@ -61,7 +61,6 @@ class Cathode:
     def cathode_resistance(self):
         ''' Solves cathode electronic conductivity considering void fraction'''
         # Set the resistance in the cathode
-        print("cathodo")
         self.cath_resistance=self.thickness/(self.cath_conductivity*(1-self.porosity)**1.5)
 
     def total_resistance(self):

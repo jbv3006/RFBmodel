@@ -21,6 +21,7 @@ class Cathode:
         self.conductivity= 0 #Conductivity of the catholyte / sigma [S m^-1]
         self.resistance=0 #Resistance of the catholyte / m^2/S
         self.T=298 #Temperature of the cell [K]
+        print("holaa")
         pass
 
     def conc_sys(self, x):
@@ -39,6 +40,7 @@ class Cathode:
         eq4 = self.c_vanadium - c1 - c2             # Total vanadium concentration
         eq5 = self.Q_1 * self.gamma_1 - c3* (c4/c6)  # First dissociation. Falta término gamma de paper de Minnan
         eq6 =  self.Q_2 * self.gamma_2 - c3* (c5/c4) # Second dissociation. Falta término de los gamma
+        print("hola hola lele")
         
         # Construct the system as an array
         return np.array([eq1, eq2, eq3, eq4, eq5, eq6])

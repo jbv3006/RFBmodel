@@ -7,6 +7,7 @@ class Cathode:
         # Initial guesses for concentrations mol/L
         # [VO^+2, VO_2^+, H+, HSO4-, SO4-2, H2SO4]
         self.c = np.array([1,      1,      1,  1,     2,     0.01])
+
         # Input parameters
         self.thickness = thickness #Cathode thickness [m]
         self.cath_conductivity = cath_conductivity #Conductivity of the cathode / sigma [S m^-1]

@@ -3,27 +3,29 @@ import numpy as np
 from rfbmodel.data import conductivity_funcV5, conductivity_funcV4
 
 class Cathode:
-    def __init__(self):
-
+    def __init__(self, thickness, cath_conductivity, porosity):
         # Initial guesses for concentrations mol/L
-                         # [VO^+2, VO_2^+, H+, HSO4-, SO4-2, H2SO4]
+        # [VO^+2, VO_2^+, H+, HSO4-, SO4-2, H2SO4]
         self.c = np.array([1,      1,      1,  1,     2,     0.01])
+
+        # Input parameters
+        self.thickness = thickness #Cathode thickness [m]
+        self.cath_conductivity = cath_conductivity #Conductivity of the cathode / sigma [S m^-1]
+        self.porosity = porosity #Cathode porosity (void fraction)
+
+        # Cell parameters
+        self.SOC = 0          # State of charge
+        self.T = 298 #Temperature of the cell [K]
         
-        # Default parameters
-        self.SOC = 0.5          # State of charge
+        # Cathode default parameters
         self.c_sulfate = 6.03   # Total sulfate concentration. 6 M or mol/L
         self.c_vanadium = 1.03  # Total vanadium concentration. M or mol/L
         self.Q_1 = 199.5        # First dissociation quotient of H2SO4 [Adimensional]. Dependence on temperature is negligible
         self.Q_2 = 2.4          # Second dissociation quotient of H2SO4 [Adimensional]. Dependence on temperature is NOT negligible
-        self.gamma_1 = 1
+        self.gamma_1 = 1        # Activity coefficient of tank in the first dissociation (?) NOT SURE
         self.gamma_2 = 1
-        self.thickness = 50/1000 #Cathode thickness [m]
         self.io_conductivity = 0 #Conductivity of the catholyte / sigma [S m^-1]
-        self.cath_conductivity = 4400 #Conductivity of the cathode / sigma [S m^-1]
         self.resistance = 0 #Resistance of the catholyte / 
-        self.T = 298 #Temperature of the cell [K]
-        self.porosity = 0.94 #Cathode porosity (void fraction)
-        pass
 
     def conc_sys(self, x):
         """Returns the residuals eq1…eq6 for the vector x = [c1…c6].
@@ -31,7 +33,6 @@ class Cathode:
         [c1,    c2,     c3, c4,    c5,    c6]
         [VO^+2, VO_2^+, H+, HSO4-, SO4-2, H2SO4]
         """
-
         c1, c2, c3, c4, c5, c6 = x
 
         # Define system of equations

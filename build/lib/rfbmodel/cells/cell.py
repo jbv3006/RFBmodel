@@ -1,48 +1,58 @@
 import numpy as np
-from sympy import symbols, Eq, solve
-from dataclasses import dataclass
-from ..acl.acl import Acl
-from ..agdl.agdl import Agdl
+from ..acl.acl import ACL
+from ..agdl.agdl import AGDL
 from ..cathodes.cathode import Cathode
 from ..membrane.membrane import Membrane
 
-@dataclass
-class ReactionProperties:
-    E_SCP: float  # Standard Cell Potential of the cell (V)
-    delta_S_r: float  # Entropy (J/mol·K)
-    n: float  # Electron number transfer in reaction ( - )
-
 class Cell:
     #class which contains the 4 classes which make a cell
+
     F=96485 # Faraday constant (Coulomb/mol)
     R=8.314 # Ideal Gas Constant (Coulomb/mol)
 
     def __init__(self, 
-                 cathode = None, 
-                 membrane = None, 
-                 acl = None, 
-                 agdl = None, 
+                 cathode: Cathode, 
+                 membrane: Membrane, 
+                 acl: ACL, 
+                 agdl: AGDL, 
                  T = 0,
                  SOC = 0,
                  Q_v = 0, 
                  j_appl = 0, 
-                 reaction_props = None):
+                 reaction_props = dict):
         
+        #Cathode initialization
+        self.cathode = cathode     # cathode is a class
+        #Cell input actualization on cathode
+        self.cathode.SOC = SOC
+        self.cathode.T=T
+        #Cathode functions
+        self.cathode.conc()
+        self.cathode.ionic_resistance()
+        self.cathode.cathode_resistance()
+        self.cathode.total_resistance()
+
+        #ACL initialization
+        self.acl = acl            # acl is a class
+        self.agdl = agdl         # agdl is a class
+
+        #Membrane initialization
         self.membrane = membrane    # membrane is a class
-        self.cathode = cathode      # cathode is a class
-        self.acl = acl              # acl is a class
-        self.agdl = agdl            # agdl is a class
+
+        #Cell operation parameters
         self.T = T                  # Temperature of the cell in Kelvin
         self.SOC = SOC              # State of charge [0 - 1]
         self.Q_v = Q_v              # Catholyte flow rate
         self.j_appl = j_appl        # Applied current density
-        self.reaction_props = reaction_props        #reaction_props is a class
+        self.reaction_props = reaction_props      #reaction_props is a class
+        
 
     
     def E0_cell(self):
         # method for the formal cell potential on temperature
         # SCP: Standard Cell Potential of the two half cell reaction
-        E0_cell=self.reaction_props.E_SCP+ self.reaction_props.delta_S_r/(n*Cell.F)*(self.T-298.15)
+        n=2
+        E0_cell=self.reaction_props['E_SCP'] + self.reaction_props['delta_S_r']/(n*Cell.F)*(self.T-298.15)
         return E0_cell
 
     def E_OCP(self):
@@ -61,4 +71,10 @@ class Cell:
         H_plus_overpotential=self.acl.Hplus()
         E_cell=E_OCP-ohm_resistance+ca_overpotential-an_overpotential-H_plus_overpotential
         return E_cell
+    
+    def R_HFR(self):
+        """Calculates high frequency resistance, which accounts for the electronic and ionic resistance of the cathode, catholyte, ACL, AGDL, 
+         membrane, current collector and bipolar plates"""
+        r_hfr=self.cathode.resistance + self.acl.resistance + self.agdl.resistance
+        return r_hfr
 

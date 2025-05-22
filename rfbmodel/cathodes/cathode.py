@@ -8,23 +8,23 @@ class Cathode:
         # [VO^+2, VO_2^+, H+, HSO4-, SO4-2, H2SO4]
         self.c = np.array([1,      1,      1,  1,     2,     0.01])
         # Input parameters
-        self.thickness = 50/1000 #Cathode thickness [m]
-        self.cath_conductivity = 4400 #Conductivity of the cathode / sigma [S m^-1]
-        self.porosity = 0.94 #Cathode porosity (void fraction)
+        self.thickness = thickness #Cathode thickness [m]
+        self.cath_conductivity = cath_conductivity #Conductivity of the cathode / sigma [S m^-1]
+        self.porosity = porosity #Cathode porosity (void fraction)
+
         # Cell parameters
         self.SOC = 0          # State of charge
         self.T = 298 #Temperature of the cell [K]
+        
+        # Cathode default parameters
         self.c_sulfate = 6.03   # Total sulfate concentration. 6 M or mol/L
         self.c_vanadium = 1.03  # Total vanadium concentration. M or mol/L
-
-        # Default parameters
         self.Q_1 = 199.5        # First dissociation quotient of H2SO4 [Adimensional]. Dependence on temperature is negligible
         self.Q_2 = 2.4          # Second dissociation quotient of H2SO4 [Adimensional]. Dependence on temperature is NOT negligible
         self.gamma_1 = 1        # Activity coefficient of tank in the first dissociation (?) NOT SURE
         self.gamma_2 = 1
         self.io_conductivity = 0 #Conductivity of the catholyte / sigma [S m^-1]
         self.resistance = 0 #Resistance of the catholyte / 
-        pass
 
     def conc_sys(self, x):
         """Returns the residuals eq1…eq6 for the vector x = [c1…c6].

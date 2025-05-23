@@ -32,12 +32,20 @@ class Cell:
         self.cathode.cathode_resistance()
         self.cathode.total_resistance()
 
-        #ACL initialization
-        self.acl = acl            # acl is a class
-        self.agdl = agdl         # agdl is a class
-
         #Membrane initialization
         self.membrane = membrane    # membrane is a class
+
+        #ACL initialization
+        self.acl = acl            # acl is a class
+        #Cell input actualization on ACL
+        self.acl.T = T
+
+        #AGDL initialization
+        self.agdl = agdl         # agdl is a class
+        #Cell input actualization on AGDL
+        self.agdl.T=T
+
+
 
         #Cell operation parameters
         self.T = T                  # Temperature of the cell in Kelvin
@@ -77,4 +85,16 @@ class Cell:
          membrane, current collector and bipolar plates"""
         r_hfr=self.cathode.resistance + self.acl.resistance + self.agdl.resistance
         return r_hfr
+    
+    def calculate_jvw_AGDL(self):
+        D_eff = 1.055 * 10**(-4) #Difussion coefficient of water vapor and hydrogen [m2/s]
+        self.agdl.calculate_cvw()
+        self.acl.calculate_cvw()
+        self.agdl.jvw = D_eff * (self.acl.cvw - self.agdl.cvw)/(self.agdl.thickness + self.acl.thickness) + self.agdl.Rw
+
+    def calculate_jvw_ACL(self):
+        D_eff = 1.055 * 10**(-4) #Difussion coefficient of water vapor and hydrogen [m2/s]
+        self.acl.jvw = D_eff * (self.acl.cvw - self.agdl.cvw)/(self.agdl.thickness + self.acl.thickness) + self.acl.Rw
+
+
 

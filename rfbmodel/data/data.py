@@ -20,10 +20,17 @@ def conductivity_funcV4(T):
     sigma=conductivity_funcV4(T)
     return sigma
 
-def conductivity_funcV5(T):
-    conductivity_funcV5 = np.poly1d(coeffsV5)  # Create a callable function
-    sigma=conductivity_funcV5(T)
-    return sigma
+#Vanadium Uptake in the membrane based on vanadium bulk concentration
+#Linearization from fig6 in "Species Uptake and Mass Transport in Membranes for Vanadium Redox Flow Batteries"
+#https://doi.org/10.1016/j.electacta.2017.03.131
+
+def v4_uptake(c_v4):
+    uptake = 0.1297 * c_v4
+    return uptake
+
+def v5_uptake(c_v5):
+    uptake = 0.0932 * c_v5
+    return uptake
 
 
 

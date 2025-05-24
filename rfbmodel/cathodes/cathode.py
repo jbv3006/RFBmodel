@@ -1,6 +1,6 @@
 from scipy.optimize import fsolve
 import numpy as np
-from rfbmodel.data import conductivity_funcV5, conductivity_funcV4
+from rfbmodel.data import conductivity_funcV5, conductivity_funcV4, v4_uptake, v4_uptake
 
 class Cathode:
     def __init__(self, thickness, cath_conductivity, porosity):
@@ -26,6 +26,9 @@ class Cathode:
         self.gamma_2 = 1
         self.io_conductivity = 0 #Conductivity of the catholyte / sigma [S m^-1]
         self.resistance = 0 #Resistance of the catholyte / 
+        self.a_wca = 1 #Water catholyte activity [adimensional] Represents the free water in the electrolyte
+        self.lambda_eq = 0 #Equilibrium water content
+        self.lambda_eq_Corr = 0 #Equilibrium water content, corrected by vanadium species in membrane
 
     def conc_sys(self, x):
         """Returns the residuals eq1…eq6 for the vector x = [c1…c6].
@@ -68,3 +71,12 @@ class Cathode:
         ''' Solves electronic and ionic resistance of the cathode and catholyte'''
         # Set the total resistance in the cathode and catholyte
         self.resistance=(1/self.cath_resistance+1/self.io_resistance)**(-1)
+
+    def calculate_eq_water(self):
+        ''' Calculates equilibrium water content in the catholyte based on water activity in the catholyte'''
+        self.lambda_eq = 51.09 * self.a_wca**3 - 70.18 * self.a_wca**2 + 40.41 * self.a_wca + 0.14 #Equilibrium water content
+        N_v4_hy = 5 #Hydration number of V(4) [dimensionless]
+        N_v5_hy = 3 #Hydration number of V(5) [dimensionless]
+        self.lambda_eq_corr = self.lambda_eq - N_v4_hy * v4_uptake(self.c[0]) - N_v5_hy * v5_uptake(self.c[1]) #Equilibrium water content corrected
+        
+
